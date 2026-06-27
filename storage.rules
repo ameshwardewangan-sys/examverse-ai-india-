@@ -1,0 +1,107 @@
+rules_version = '2';
+
+service firebase.storage {
+
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userRole() {
+      return firestore.get(
+        /databases/(default)/documents/users/$(request.auth.uid)
+      ).data.role;
+    }
+
+    function isOwner() {
+      return signedIn() && userRole() == "owner";
+    }
+
+    function isStaff() {
+      return signedIn() &&
+        (
+          userRole() == "owner" ||
+          userRole() == "super_admin" ||
+          userRole() == "admin" ||
+          userRole() == "moderator"
+        );
+    }
+
+    /* ==========================
+       User Profile Images
+    ========================== */
+
+    match /profiles/{userId}/{fileName} {
+
+      allow read;
+
+      allow write:
+        if signedIn() &&
+        request.auth.uid == userId;
+
+    }
+
+    /* ==========================
+       Notes
+    ========================== */
+
+    match /notes/{allPaths=**} {
+
+      allow read;
+
+      allow write:
+        if isStaff();
+
+    }
+
+    /* ==========================
+       Mock Tests
+    ========================== */
+
+    match /mock_tests/{allPaths=**} {
+
+      allow read;
+
+      allow write:
+        if isStaff();
+
+    }
+
+    /* ==========================
+       OCR Uploads
+    ========================== */
+
+    match /ocr/{userId}/{fileName} {
+
+      allow read, write:
+        if signedIn() &&
+        request.auth.uid == userId;
+
+    }
+
+    /* ==========================
+       Voice Files
+    ========================== */
+
+    match /voice/{userId}/{fileName} {
+
+      allow read, write:
+        if signedIn() &&
+        request.auth.uid == userId;
+
+    }
+
+    /* ==========================
+       Default
+    ========================== */
+
+    match /{allPaths=**} {
+
+      allow read, write: if false;
+
+    }
+
+  }
+
+}
