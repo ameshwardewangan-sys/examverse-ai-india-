@@ -3,7 +3,7 @@
  * Cloud Functions
  * Production Base
  */
-
+const aiVoice = require("./ai-voice");
 const aiOCR = require("./ai-ocr");
 const aiChat = require("./ai-chat");
 const { onRequest } = require("firebase-functions/v2/https");
@@ -118,3 +118,7 @@ exports.getOCRConfig = aiOCR.getOCRConfig;
 exports.validateOCRImage = aiOCR.validateOCRImage;
 exports.generateNotesFromOCR = aiOCR.generateNotesFromOCR;
 exports.ocrHealth = aiOCR.ocrHealth;
+exports.voiceStatus = aiVoice.voiceStatus;
+exports.speechToText = aiVoice.speechToText;
+exports.textToSpeech = aiVoice.textToSpeech;
+
