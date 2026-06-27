@@ -110,3 +110,7 @@ exports.chatConfig = aiChat.chatConfig;
 exports.ocrStatus = aiOCR.ocrStatus;
 exports.uploadOCR = aiOCR.uploadOCR;
 exports.getOCRJobs = aiOCR.getOCRJobs;
+exports.saveOCRResult = aiOCR.saveOCRResult;
+exports.getOCRHistory = aiOCR.getOCRHistory;
+exports.deleteOCRJob = aiOCR.deleteOCRJob;
+exports.ocrAnalytics = aiOCR.ocrAnalytics;
