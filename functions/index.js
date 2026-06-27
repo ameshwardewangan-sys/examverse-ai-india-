@@ -134,3 +134,7 @@ exports.voiceHealth = aiVoice.voiceHealth;
 exports.submitMockTest = mockTests.submitMockTest;
 exports.getMockResults = mockTests.getMockResults;
 exports.getLeaderboard = mockTests.getLeaderboard;
+exports.evaluateMockTest = mockTests.evaluateMockTest;
+exports.mockAnalytics = mockTests.mockAnalytics;
+exports.deleteMockTest = mockTests.deleteMockTest;
+exports.mockHealth = mockTests.mockHealth;
