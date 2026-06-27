@@ -1,4 +1,5 @@
 # all_in_one
+" One Platform. Every Exam. Every Skill. AI Powered Learning."
 
 ExamVerse AI is a next-generation AI-powered Government Exam Preparation Platform for India. It provides UPSC, SSC, Railway, Banking, State PSC, Police, and other exam preparation with Previous Year Papers, Mock Tests, Current Affairs, Job Notifications, and Official Apply Links.
 
