@@ -275,3 +275,15 @@ exports.getAIMemory = onRequest(async (req, res) => {
   });
 
 });
+let history = await db.collection("ai_memory")
+  .where("userId", "==", userId || "guest")
+  .orderBy("createdAt", "desc")
+  .limit(5)
+  .get();
+
+let context = "";
+
+history.forEach(doc => {
+  context += doc.data().question + " -> " + doc.data().answer + "\n";
+});
+const finalPrompt = systemPrompt + "\n\nPast Context:\n" + context + "\n\nQuestion: " + question;
