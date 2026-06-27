@@ -87,6 +87,7 @@ margin-top:10px;
 
 </head>
 <body>
+
 <!-- =========================
      LOGIN SCREEN
 ========================= -->
@@ -108,7 +109,15 @@ margin-top:10px;
 <!-- =========================
      DASHBOARD
 ========================= -->
+<div style="padding:10px;text-align:center;">
 
+  <button onclick="setMode('general')">General</button>
+  <button onclick="setMode('ssc')">SSC</button>
+  <button onclick="setMode('railway')">Railway</button>
+  <button onclick="setMode('banking')">Banking</button>
+  <button onclick="setMode('hindi')">Hindi</button>
+
+</div>
 <div id="dashboard" style="display:none;">
 
   <h2>Welcome to ExamVerse AI 🚀</h2>
