@@ -232,3 +232,106 @@ window.openOCR = () => alert("OCR UI Coming Soon");
 window.openVoice = () => alert("Voice UI Coming Soon");
 window.openCurrentAffairs = () => alert("Current Affairs UI Coming Soon");
 window.openNotifications = () => alert("Notifications UI Coming Soon");
+/* =========================
+   OPEN CHAT SCREEN
+========================= */
+
+window.openAIChat = function () {
+
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("aiChatScreen").style.display = "flex";
+
+};
+
+
+window.sendMessage = async function () {
+
+  const msg = document.getElementById("userMsg").value;
+  if (!msg) return;
+
+  const chatBox = document.getElementById("chatBox");
+
+  // USER MESSAGE
+  chatBox.innerHTML += `
+    <div style="text-align:right;margin:5px;">
+      <span style="background:#2563eb;color:white;padding:8px;border-radius:10px;display:inline-block;">
+        ${msg}
+      </span>
+    </div>
+  `;
+
+  document.getElementById("userMsg").value = "";
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  try {
+
+    // 🔥 CALL FIREBASE FUNCTION (REAL AI)
+    const res = await fetch(`${BASE_URL}/askAI`, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+  question: msg,
+  userId: "demo-user",
+  mode: currentMode
+      })
+
+    });
+
+    const data = await res.json();
+
+    const reply = data.answer || "No response from AI";
+
+    // AI MESSAGE
+    chatBox.innerHTML += `
+      <div style="text-align:left;margin:5px;">
+        <span style="background:#e2e8f0;padding:8px;border-radius:10px;display:inline-block;">
+          🤖 ${reply}
+        </span>
+      </div>
+    `;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+  } catch (error) {
+
+    chatBox.innerHTML += `
+      <div style="text-align:left;margin:5px;">
+        <span style="background:red;color:white;padding:8px;border-radius:10px;display:inline-block;">
+          Error: AI not responding
+        </span>
+      </div>
+    `;
+let currentMode = "general"; // general | ssc | railway | banking | hindi
+window.setMode = function(mode) {
+
+  currentMode = mode;
+
+  alert("Mode changed to: " + mode);
+
+};
+  }
+
+};
+
+  // AI RESPONSE (temporary)
+  setTimeout(() => {
+
+    chatBox.innerHTML += `
+      <div style="text-align:left;margin:5px;">
+        <span style="background:#e2e8f0;padding:8px;border-radius:10px;display:inline-block;">
+          AI: I'm ExamVerse AI, backend connect pending 🚀
+        </span>
+      </div>
+    `;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+  }, 800);
+
+};
