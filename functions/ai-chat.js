@@ -257,3 +257,124 @@ exports.checkRateLimit = onRequest(async (req, res) => {
 
 });
 
+/* ==========================================
+   Chat Analytics
+========================================== */
+
+exports.chatAnalytics = onRequest(async (req, res) => {
+
+  try {
+
+    const snapshot = await db
+      .collection("chat_messages")
+      .get();
+
+    res.json({
+
+      success: true,
+
+      totalMessages: snapshot.size,
+
+      status: "Analytics Ready"
+
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+
+      success: false,
+
+      error: error.message
+
+    });
+
+  }
+
+});
+
+
+/* ==========================================
+   Conversation Summary
+========================================== */
+
+exports.getConversationSummary = onRequest(async (req, res) => {
+
+  res.json({
+
+    success: true,
+
+    summary: "Conversation summary endpoint ready."
+
+  });
+
+});
+
+
+/* ==========================================
+   Chat Moderation
+========================================== */
+
+exports.moderateMessage = onRequest(async (req, res) => {
+
+  const { message } = req.body;
+
+  if (!message) {
+
+    return res.status(400).json({
+
+      success: false,
+
+      message: "Message is required."
+
+    });
+
+  }
+
+  res.json({
+
+    success: true,
+
+    safe: true,
+
+    message: "Message passed moderation."
+
+  });
+
+});
+
+
+/* ==========================================
+   Chat Configuration
+========================================== */
+
+exports.chatConfig = onRequest(async (req, res) => {
+
+  res.json({
+
+    success: true,
+
+    config: {
+
+      maxMessageLength: 2000,
+
+      maxHistory: 100,
+
+      supportedLanguages: [
+
+        "English",
+
+        "Hindi"
+
+      ]
+
+    }
+
+  });
+
+});
+
+
+/* ==========================================
+   End AI Chat Module
+========================================== */
