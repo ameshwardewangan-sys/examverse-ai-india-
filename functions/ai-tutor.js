@@ -60,7 +60,7 @@ exports.askAI = onRequest(async (req, res) => {
        FAKE AI RESPONSE (Replace later with Gemini/OpenAI)
     ========================================== */
 
-    const API_KEY = "YOUR_GEMINI_API_KEY";
+    const API_KEY = "AQ.Ab8RN6KeHiqqpqu6_oFx0zrNrpiI9_AdFACSMWMXi926M63EiA";
 
 const prompt = `${systemPrompt}\n\nUser Question: ${question}`;
 
