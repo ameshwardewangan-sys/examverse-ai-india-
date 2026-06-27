@@ -183,3 +183,52 @@ export async function getNotifications(userId) {
 
   return await res.json();
 }
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./app.js";
+
+
+window.loginUser = async function () {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+
+    await signInWithEmailAndPassword(auth, email, password);
+
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+};
+
+
+window.registerUser = async function () {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+
+    await createUserWithEmailAndPassword(auth, email, password);
+
+    alert("Registered Successfully!");
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+};
+window.openAI = () => alert("AI Tutor Coming Soon UI");
+window.openMockTests = () => alert("Mock Tests UI Coming Soon");
+window.openOCR = () => alert("OCR UI Coming Soon");
+window.openVoice = () => alert("Voice UI Coming Soon");
+window.openCurrentAffairs = () => alert("Current Affairs UI Coming Soon");
+window.openNotifications = () => alert("Notifications UI Coming Soon");
