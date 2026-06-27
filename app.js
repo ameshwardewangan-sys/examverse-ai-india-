@@ -16,7 +16,7 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AQ.Ab8RN6KeHiqqpqu6_oFx0zrNrpiI9_AdFACSMWMXi926M63EiA",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
   projectId: "examverse-ai-india",
   storageBucket: "YOUR_PROJECT.appspot.com",
@@ -39,7 +39,7 @@ let user = {
 
 // ================= WEATHER API =================
 // (OpenWeather example - replace API key later)
-const WEATHER_API_KEY = "YOUR_API_KEY_HERE";
+const WEATHER_API_KEY = "AQ.Ab8RN6KeHiqqpqu6_oFx0zrNrpiI9_AdFACSMWMXi926M63EiA";
 
 async function getCityWeather(city) {
   try {
@@ -252,6 +252,11 @@ window.sendMessage = async function () {
   const chatBox = document.getElementById("chatBox");
 
   // USER MESSAGE
+  chatBox.innerHTML += `
+  <div class="aiMsg">
+    <span>🤖 ${reply}</span>
+  </div>
+`;
   chatBox.innerHTML += `
     <div style="text-align:right;margin:5px;">
       <span style="background:#2563eb;color:white;padding:8px;border-radius:10px;display:inline-block;">
