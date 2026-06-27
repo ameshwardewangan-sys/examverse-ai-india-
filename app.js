@@ -428,3 +428,82 @@ window.startVoice = function () {
   };
 
 };
+r
+let currentQ = 0;
+let score = 0;
+
+const questions = [
+  {
+    q: "What is the capital of India?",
+    options: ["Mumbai", "Delhi", "Kolkata", "Chennai"],
+    answer: "Delhi"
+  },
+  {
+    q: "2 + 2 = ?",
+    options: ["3", "4", "5", "6"],
+    answer: "4"
+  }
+];
+
+window.startTest = function () {
+
+  currentQ = 0;
+  score = 0;
+  loadQuestion();
+
+  startTimer(600); // 10 min
+
+};
+
+function loadQuestion() {
+
+  const q = questions[currentQ];
+
+  document.getElementById("questionBox").innerText = q.q;
+
+  const optionsBox = document.getElementById("optionsBox");
+
+  optionsBox.innerHTML = "";
+
+  q.options.forEach(opt => {
+
+    optionsBox.innerHTML += `
+      <button onclick="selectAnswer('${opt}')">${opt}</button>
+    `;
+
+  });
+
+}
+r
+function showResult() {
+
+  document.getElementById("questionBox").innerHTML = "Test Completed";
+
+  document.getElementById("optionsBox").innerHTML = "";
+
+  document.getElementById("resultBox").innerHTML =
+    `Your Score: ${score} / ${questions.length}`;
+
+}
+function startTimer(duration) {
+
+  let timer = duration;
+
+  const interval = setInterval(() => {
+
+    let minutes = Math.floor(timer / 60);
+    let seconds = timer % 60;
+
+    document.getElementById("timer").innerText =
+      `Time: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+    timer--;
+
+    if (timer < 0) {
+      clearInterval(interval);
+      showResult();
+    }
+
+  }, 1000);
+
+}
