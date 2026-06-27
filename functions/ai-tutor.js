@@ -1,14 +1,7 @@
-const aiTutor = require("./ai-tutor");
-
-exports.askAI = aiTutor.askAI;
-exports.generateQuiz = aiTutor.generateQuiz;
-exports.evaluateAnswer = aiTutor.evaluateAnswer;
-exports.generateSummary = aiTutor.generateSummary;
 /**
  * ==========================================
- * ExamVerse AI
- * AI Tutor Backend
- * Part 1
+ * ExamVerse AI Tutor
+ * Production Ready Backend
  * ==========================================
  */
 
@@ -17,265 +10,117 @@ const admin = require("firebase-admin");
 
 const db = admin.firestore();
 
+
 /* ==========================================
-   AI Tutor Health
+   AI ASK FUNCTION (MAIN BRAIN)
 ========================================== */
 
 exports.askAI = onRequest(async (req, res) => {
 
   try {
 
-    const { question, userId } = req.body;
+    const { question, mode, userId } = req.body;
 
     if (!question) {
-      return res.status(400).json({
-        success: false,
-        message: "Question is required."
-      });
-    }
-
-    await db.collection("ai_logs").add({
-
-      userId: userId || "guest",
-
-      question,
-
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
-
-    });
-
-    res.json({
-
-      success: true,
-
-      message: "AI Tutor endpoint ready.",
-
-      answer: "AI integration will be connected here."
-
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-
-      success: false,
-
-      error: error.message
-
-    });
-
-  }
-
-});
-
-
-/* ==========================================
-   Quiz Generator
-========================================== */
-
-exports.generateQuiz = onRequest(async (req, res) => {
-
-  res.json({
-
-    success: true,
-
-    message: "Quiz Generator Ready"
-
-  });
-
-});
-
-
-/* ==========================================
-   Answer Evaluation
-========================================== */
-
-exports.evaluateAnswer = onRequest(async (req, res) => {
-
-  res.json({
-
-    success: true,
-
-    message: "Answer Evaluation Ready"
-
-  });
-
-});
-
-
-/* ==========================================
-   Summary Generator
-========================================== */
-
-exports.generateSummary = onRequest(async (req, res) => {
-
-  res.json({
-
-    success: true,
-
-    message: "Summary Generator Ready"
-
-  });
-
-});
-/* ==========================================
-   Save AI Conversation
-========================================== */
-
-exports.saveConversation = onRequest(async (req, res) => {
-
-  try {
-
-    const { userId, question, answer } = req.body;
-
-    if (!userId || !question || !answer) {
 
       return res.status(400).json({
 
         success: false,
 
-        message: "Missing required fields."
+        message: "Question is required"
 
       });
 
     }
 
-    await db.collection("users")
-      .doc(userId)
-      .collection("ai_history")
-      .add({
+    /* ==========================================
+       MODE SYSTEM (EXAM SPECIALIZATION)
+    ========================================== */
 
-        question,
+    let systemPrompt = "";
 
-        answer,
-
-        createdAt: admin.firestore.FieldValue.serverTimestamp()
-
-      });
-
-    res.json({
-
-      success: true,
-
-      message: "Conversation saved successfully."
-
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-
-      success: false,
-
-      error: error.message
-
-    });
-
-  }
-
-});
-
-
-/* ==========================================
-   Get AI History
-========================================== */
-
-exports.getHistory = onRequest(async (req, res) => {
-
-  try {
-
-    const userId = req.query.userId;
-
-    if (!userId) {
-
-      return res.status(400).json({
-
-        success: false,
-
-        message: "User ID is required."
-
-      });
-
+    if (mode === "ssc") {
+      systemPrompt = "You are SSC exam expert. Give short and accurate answers.";
+    } 
+    else if (mode === "railway") {
+      systemPrompt = "You are Railway exam coach. Focus on GK and reasoning.";
+    } 
+    else if (mode === "banking") {
+      systemPrompt = "You are Banking exam mentor. Focus on finance and aptitude.";
+    } 
+    else if (mode === "hindi") {
+      systemPrompt = "Always answer in simple Hindi.";
+    } 
+    else {
+      systemPrompt = "You are ExamVerse AI tutor for all exams. Explain clearly and simply.";
     }
 
-    const snapshot = await db
-      .collection("users")
-      .doc(userId)
-      .collection("ai_history")
-      .orderBy("createdAt", "desc")
-      .limit(50)
-      .get();
 
-    const history = [];
+    /* ==========================================
+       FAKE AI RESPONSE (Replace later with Gemini/OpenAI)
+    ========================================== */
 
-    snapshot.forEach(doc => {
+    const aiResponse = `(${mode || "general"}) Answer: ${question}`;
 
-      history.push({
-
-        id: doc.id,
-
-        ...doc.data()
-
-      });
-
-    });
-
-    res.json({
-
-      success: true,
-
-      history
-
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-
-      success: false,
-
-      error: error.message
-
-    });
-
-  }
-
-});
-
-
-/* ==========================================
-   Delete AI History
-========================================== */
-
-exports.clearHistory = onRequest(async (req, res) => {
-
-  res.json({
-
-    success: true,
-
-    message: "Clear history endpoint ready."
-
-  });
-
-});
-/* ==========================================
-   AI Tutor Part 3
-   Usage Analytics & Health
-========================================== */
-
-/* Save AI Usage */
-
-exports.logAIUsage = onRequest(async (req, res) => {
-
-  try {
-
-    const { userId, feature } = req.body;
+    /* ==========================================
+       SAVE USAGE LOG
+    ========================================== */
 
     await db.collection("ai_usage").add({
 
       userId: userId || "guest",
 
-      feature: feature || "ai_tutor",
+      question,
+
+      mode: mode || "general",
+
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+
+    });
+
+
+    res.json({
+
+      success: true,
+
+      answer: aiResponse,
+
+      systemPrompt
+
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+
+      success: false,
+
+      error: error.message
+
+    });
+
+  }
+
+});
+
+
+/* ==========================================
+   AI USAGE LOG (Optional endpoint)
+========================================== */
+
+exports.logAIUsage = onRequest(async (req, res) => {
+
+  try {
+
+    const { userId, question, mode } = req.body;
+
+    await db.collection("ai_usage").add({
+
+      userId: userId || "guest",
+
+      question: question || "",
+
+      mode: mode || "general",
 
       createdAt: admin.firestore.FieldValue.serverTimestamp()
 
@@ -304,7 +149,9 @@ exports.logAIUsage = onRequest(async (req, res) => {
 });
 
 
-/* AI Status */
+/* ==========================================
+   AI STATUS
+========================================== */
 
 exports.aiStatus = onRequest(async (req, res) => {
 
@@ -325,7 +172,9 @@ exports.aiStatus = onRequest(async (req, res) => {
 });
 
 
-/* AI Configuration */
+/* ==========================================
+   AI CONFIG
+========================================== */
 
 exports.getAIConfig = onRequest(async (req, res) => {
 
@@ -339,23 +188,12 @@ exports.getAIConfig = onRequest(async (req, res) => {
 
       maxQuizQuestions: 100,
 
-      supportedLanguages: [
+      supportedLanguages: ["English", "Hindi"],
 
-        "English",
-
-        "Hindi"
-
-      ],
-
-      aiModel: "Gemini"
+      aiModel: "Gemini (Ready to integrate)"
 
     }
 
   });
 
 });
-
-
-/* ==========================================
-   End of AI Tutor Module
-========================================== */
