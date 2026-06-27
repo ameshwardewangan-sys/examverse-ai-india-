@@ -84,7 +84,74 @@ border-radius:10px;
 margin-top:10px;
 }
 </style>
+<style>
 
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f1f5f9;
+}
+
+/* Login */
+#loginScreen {
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+/* Buttons */
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px;
+  margin: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #1d4ed8;
+  transform: scale(1.03);
+}
+
+/* Dashboard cards */
+#dashboard button {
+  width: 100%;
+  font-size: 14px;
+}
+
+/* Chat UI */
+#chatBox {
+  background: #e5e7eb;
+}
+
+/* Chat bubbles */
+.userMsg {
+  text-align: right;
+  margin: 5px;
+}
+
+.userMsg span {
+  background: #2563eb;
+  color: white;
+  padding: 8px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.aiMsg {
+  text-align: left;
+  margin: 5px;
+}
+
+.aiMsg span {
+  background: white;
+  padding: 8px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+</style>
 </head>
 <body>
 
