@@ -114,3 +114,7 @@ exports.saveOCRResult = aiOCR.saveOCRResult;
 exports.getOCRHistory = aiOCR.getOCRHistory;
 exports.deleteOCRJob = aiOCR.deleteOCRJob;
 exports.ocrAnalytics = aiOCR.ocrAnalytics;
+exports.getOCRConfig = aiOCR.getOCRConfig;
+exports.validateOCRImage = aiOCR.validateOCRImage;
+exports.generateNotesFromOCR = aiOCR.generateNotesFromOCR;
+exports.ocrHealth = aiOCR.ocrHealth;
