@@ -97,3 +97,8 @@ exports.sendNotification = onRequest(async (req, res) => {
 exports.logAIUsage = aiTutor.logAIUsage;
 exports.aiStatus = aiTutor.aiStatus;
 exports.getAIConfig = aiTutor.getAIConfig;
+exports.clearChatHistory = aiChat.clearChatHistory;
+exports.updateTypingStatus = aiChat.updateTypingStatus;
+exports.markMessagesRead = aiChat.markMessagesRead;
+exports.getConversation = aiChat.getConversation;
+exports.checkRateLimit = aiChat.checkRateLimit;
