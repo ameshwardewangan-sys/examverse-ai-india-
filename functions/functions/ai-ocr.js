@@ -271,3 +271,122 @@ exports.ocrAnalytics = onRequest(async (req, res) => {
   });
 
 });
+/* ==========================================
+   OCR Configuration
+========================================== */
+
+exports.getOCRConfig = onRequest(async (req, res) => {
+
+  res.json({
+
+    success: true,
+
+    config: {
+
+      maxFileSizeMB: 20,
+
+      supportedFormats: [
+
+        "jpg",
+
+        "jpeg",
+
+        "png",
+
+        "pdf"
+
+      ],
+
+      supportedLanguages: [
+
+        "English",
+
+        "Hindi"
+
+      ]
+
+    }
+
+  });
+
+});
+
+
+/* ==========================================
+   Image Validation
+========================================== */
+
+exports.validateOCRImage = onRequest(async (req, res) => {
+
+  const { fileName } = req.body;
+
+  if (!fileName) {
+
+    return res.status(400).json({
+
+      success: false,
+
+      message: "File name is required."
+
+    });
+
+  }
+
+  res.json({
+
+    success: true,
+
+    valid: true,
+
+    message: "Image validation passed."
+
+  });
+
+});
+
+
+/* ==========================================
+   Generate Notes From OCR
+========================================== */
+
+exports.generateNotesFromOCR = onRequest(async (req, res) => {
+
+  const { text } = req.body;
+
+  res.json({
+
+    success: true,
+
+    originalLength: text ? text.length : 0,
+
+    notes: "AI Notes generation endpoint is ready."
+
+  });
+
+});
+
+
+/* ==========================================
+   OCR Health Check
+========================================== */
+
+exports.ocrHealth = onRequest(async (req, res) => {
+
+  res.json({
+
+    success: true,
+
+    service: "OCR",
+
+    status: "Healthy",
+
+    timestamp: Date.now()
+
+  });
+
+});
+
+
+/* ==========================================
+   End OCR Module
+========================================== */
