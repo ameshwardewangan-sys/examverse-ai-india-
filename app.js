@@ -23,7 +23,67 @@ const firebaseConfig = {
   messagingSenderId: "XXXX",
   appId: "XXXX"
 };
+window.openOCR = function () {
 
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("ocrScreen").style.display = "block";
+
+};
+window.uploadImage = async function () {
+
+  const file = document.getElementById("imageInput").files[0];
+
+  if (!file) {
+    alert("Please select an image");
+    return;
+  }
+
+  const resultBox = document.getElementById("ocrResult");
+
+  resultBox.innerHTML = "Processing image... 🤖";
+
+  // Convert image to base64
+  const reader = new FileReader();
+
+  reader.onloadend = async function () {
+
+    const base64Image = reader.result;
+
+    try {
+
+      const res = await fetch(`${BASE_URL}/ocrAI`, {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          image: base64Image,
+          userId: "demo-user"
+        })
+
+      });
+
+      const data = await res.json();
+
+      resultBox.innerHTML = `
+        <h3>Answer:</h3>
+        <p>${data.answer || "No response"}</p>
+      `;
+
+    } catch (error) {
+
+      resultBox.innerHTML = "Error processing image";
+
+    }
+
+  };
+
+  reader.readAsDataURL(file);
+
+};
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
