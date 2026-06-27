@@ -121,3 +121,153 @@ exports.getOCRJobs = onRequest(async (req, res) => {
   }
 
 });
+/* ==========================================
+   Save OCR Result
+========================================== */
+
+exports.saveOCRResult = onRequest(async (req, res) => {
+
+  try {
+
+    const {
+
+      jobId,
+
+      extractedText
+
+    } = req.body;
+
+    if (!jobId) {
+
+      return res.status(400).json({
+
+        success: false,
+
+        message: "Job ID is required."
+
+      });
+
+    }
+
+    await db.collection("ocr_results").add({
+
+      jobId,
+
+      extractedText: extractedText || "",
+
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+
+    });
+
+    res.json({
+
+      success: true,
+
+      message: "OCR result saved successfully."
+
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+
+      success: false,
+
+      error: error.message
+
+    });
+
+  }
+
+});
+
+
+/* ==========================================
+   OCR History
+========================================== */
+
+exports.getOCRHistory = onRequest(async (req, res) => {
+
+  try {
+
+    const snapshot = await db
+
+      .collection("ocr_results")
+
+      .orderBy("createdAt", "desc")
+
+      .limit(100)
+
+      .get();
+
+    const history = [];
+
+    snapshot.forEach(doc => {
+
+      history.push({
+
+        id: doc.id,
+
+        ...doc.data()
+
+      });
+
+    });
+
+    res.json({
+
+      success: true,
+
+      history
+
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+
+      success: false,
+
+      error: error.message
+
+    });
+
+  }
+
+});
+
+
+/* ==========================================
+   Delete OCR Job
+========================================== */
+
+exports.deleteOCRJob = onRequest(async (req, res) => {
+
+  res.json({
+
+    success: true,
+
+    message: "Delete OCR Job endpoint ready."
+
+  });
+
+});
+
+
+/* ==========================================
+   OCR Analytics
+========================================== */
+
+exports.ocrAnalytics = onRequest(async (req, res) => {
+
+  const jobs = await db.collection("ocr_jobs").get();
+
+  res.json({
+
+    success: true,
+
+    totalJobs: jobs.size
+
+  });
+
+});
